@@ -1,22 +1,37 @@
-import { defineComponent } from 'vue';
-import { useTasks } from './Tasks';
+import { defineComponent, h, onMounted } from 'vue';
+import TasksManger from './TasksManager';
+
+const Tasks = defineComponent(() => {
+
+	onMounted(() => {
+		console.log(99999999999999);
+		console.log(document.querySelector('.aaa'));
+	});
+
+	return () => h('div', {class: 'aaa', style: {
+		height: '200px',
+		width: '200px',
+		backgroundColor: 'red',
+	}})
+});
+
 
 export default defineComponent(
 	() => {
-		const tasks = useTasks();
-		const tasksNode = tasks.useNode({
-			type: 'video',
-			tasks: []
+		const TasksMgr = new TasksManger({
+			comp: Tasks,
+			props: {
+				type: 'video',
+				tasks: []
+			}
 		});
 
-		setTimeout(() => {
-			tasks.state = false;
+		
 
-			console.log('@Inspect =>', tasks.state, tasksNode.value);
-		}, 3000);
+		TasksMgr.STATE = true;
 
-		return () => {
-			return tasksNode.value;
-		};
+		TasksMgr.open();
+
+		return () => TasksMgr.VNODE;
 	}
 );
